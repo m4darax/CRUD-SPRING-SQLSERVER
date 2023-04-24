@@ -26,7 +26,7 @@ public class TypeDocument implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("typeDocument")
     @OneToMany(mappedBy = "typeDocument")
     private List<Cliente> clientes;
 

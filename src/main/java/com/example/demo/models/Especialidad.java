@@ -2,6 +2,8 @@ package com.example.demo.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "especialidad")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Especialidad implements Serializable {
 
     @Id
@@ -25,7 +29,8 @@ public class Especialidad implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToMany(mappedBy = "especialidads", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "especialidads", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("especialidads")
     private List<Cliente> clientes;
 
 }

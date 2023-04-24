@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cliente implements Serializable {
 
     @Id
@@ -27,12 +31,13 @@ public class Cliente implements Serializable {
     private String apellido;
 
     @ManyToOne( cascade = CascadeType.ALL)
-//    @JsonProperty("tipos")
+    @JsonIgnoreProperties("clientes")
     @JoinColumn(name = "id_type_document")
     private TypeDocument typeDocument;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "cliente_especialidad", joinColumns = @JoinColumn(name = "id_cliente"), inverseJoinColumns = @JoinColumn(name = "id_especialidad")
     ,uniqueConstraints = {@UniqueConstraint(columnNames = {"id_cliente", "id_especialidad"})})
+    @JsonIgnoreProperties("clientes")
     private List<Especialidad> especialidads;
 }
